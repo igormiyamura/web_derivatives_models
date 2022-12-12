@@ -1,5 +1,5 @@
 
-from services.option import OptionKO, OptionEuro, OptionKI
+from services.option import OptionAverage, OptionKO, OptionEuro, OptionKI
 from services.payoff import PayoffCall, PayoffPut
 from services.events import STDoubleBarrier
 from services.process import GeneratorGBM
@@ -11,9 +11,11 @@ class InputManager:
         self._data = data
         
     def set_option(self, t_option):
-        if t_option == 'o':
+        if t_option == 'a':
+            return OptionAverage.OptionAverage(self._data)
+        elif t_option == 'o':
             return OptionKO.OptionKO(self._data)
-        if t_option == 'i':
+        elif t_option == 'i':
             return OptionKI.OptionKI(self._data)
         elif t_option == 'e':
             return OptionEuro.OptionEuro(self._data)

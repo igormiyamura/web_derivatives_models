@@ -20,7 +20,7 @@ class MonteCarlo:
         self.OBJ_EVOL = EvolverW.EvolverW(data)
         
         # Slice Variables
-        self._slice_time = self.T
+        self._slice_time = 0
         self._slice = np.zeros(self.M)
         
         # Output Variables
@@ -30,15 +30,21 @@ class MonteCarlo:
         
     def run(self):
         simulation_values = {}
+        for i in range(0, self.M):
+            simulation_values[i] = [] # Plot price timesteps
         
         for i in range(0, self.N):
-            simulation_values[i] = [] # Plot price timesteps
+            self.OBJ_EVOL.evolve_next_slice(self._slice, i, i)
+            self.OBJ_Option.receive_next_slice(self._slice, i, i)
             
-            self.OBJ_EVOL.evolve_next_slice(self._slice, i, self._slice_time)
-            self.OBJ_Option.evolve_next_slice(self._slice, i, self._slice_time)
+            count_simulation = 0
+            for v in self._slice:
+                simulation_values[count_simulation].append(v)
+                count_simulation += 1
             
             self.my_bar.progress(i/self.N) # Progress Bar
             
+        self.register()
         value = self.option_value
         standard_error = self.se_value
         

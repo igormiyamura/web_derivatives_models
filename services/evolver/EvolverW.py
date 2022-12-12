@@ -11,6 +11,11 @@ class EvolverW(IEvolver):
         self._und.reset()
         self._wie.reset()
         
+        self._slice = 0
+        
     def evolve_next_slice(self, slice, i, t):
-        self._wie.evolve_next_slice(slice, i, t)
-        self._und.evolve_next_slice(slice, i, t)
+        self._slice = slice
+        self._slice = self._wie.evolve_next_slice(self._slice, i, t)
+        self._slice = self._und.evolve_next_slice(self._slice, i, t)
+        
+        return self._slice

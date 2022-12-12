@@ -13,7 +13,7 @@ class OptionAverage(IOption):
         
         self._r = data['r']
         self._discount = np.exp(-data['r'] * data['T'])
-        self._acc_values = np.zeros((1, self._M))
+        self._acc_values = np.zeros(self._M)
         
         self.reset()
         
@@ -31,7 +31,7 @@ class OptionAverage(IOption):
     def get_done(self):
         return False
     
-    def evolve_next_slice(self, s_values, i, t):
+    def receive_next_slice(self, s_values, i, t):
         for j in range(0, self._M):
             self._acc_values[j] += s_values[j]
             

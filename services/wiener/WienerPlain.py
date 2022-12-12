@@ -34,3 +34,5 @@ class WienerPlain(IWiener):
             
         t = i * self.dt
         self._last_i = i
+        
+        return slice

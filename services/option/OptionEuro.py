@@ -30,14 +30,15 @@ class OptionEuro(IOption):
     def get_done(self):
         return False
     
-    def evolve_next_slice(self, s_values, i, t):
-        if t == self._T: 
-            self._option_values = s_values
+    def receive_next_slice(self, s_values, i, t):
+        if t + 1 == self._N:
+            self._option_values = s_values.copy()
+            self.compute_option_values(s_values)
             self.compute_values()
             
     def compute_option_values(self, s_values):
         for i in range(0, self._M):
-            self._option_values = self._pay.payoff(s_values[i])
+            self._option_values[i] = self._pay.payoff(s_values[i])
             
         self.ready = True
             

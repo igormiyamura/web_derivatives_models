@@ -6,26 +6,28 @@ class Type_Parameters:
     
     def option_types(self):
         st.write("### Tipo da Opção:")
+        opt_col1, opt_col2, opt_col3 = st.columns(3)
         
         DICT_PAYOFF = {
             'Call': 'c',
             'Put': 'p',
             'Bond': 'b'
         }
-        payoff = st.selectbox('Tipo de Payoff', options=list(DICT_PAYOFF.keys()))
+        payoff = opt_col1.selectbox('Tipo de Payoff', options=list(DICT_PAYOFF.keys()))
 
         DICT_EVENTS = {
             'No Event': 'n',
             'Double Barrier': 'd'
         }
-        event = st.selectbox('Tipo de Evento', options=list(DICT_EVENTS.keys()))
+        event = opt_col2.selectbox('Tipo de Evento', options=list(DICT_EVENTS.keys()))
         
         DICT_OPTIONS = {
+            'Average': 'a',
             'European': 'e',
             'Knock-Out': 'o',
             'Knock-In': 'i'
         }
-        option = st.selectbox('Tipo da Opção', options=list(DICT_OPTIONS.keys()))
+        option = opt_col3.selectbox('Tipo da Opção', options=list(DICT_OPTIONS.keys()))
 
         return DICT_PAYOFF[payoff], DICT_EVENTS[event], DICT_OPTIONS[option]
     

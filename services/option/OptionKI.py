@@ -15,7 +15,7 @@ class OptionKI(IOption):
         self._r = data['r']
         self._discount = np.exp(-data['r'] * data['T'])
         
-        self.started = np.zeros(0, self._M)
+        self.started = np.zeros(self._M)
         
         self.reset()
         
@@ -36,14 +36,18 @@ class OptionKI(IOption):
     def update_started(self, s_values, t):
         for i in range(0, self._M):
             if not self.started[i]:
-                self.started[i] = self._event.TestEvent(s_values[i])
+                self.started[i] = self._event.test_event(s_values[i])
     
-    def evolve_next_slice(self, s_values, i, t):
-        if t == self._T: self.compute_values(s_values)
+    def receive_next_slice(self, s_values, i, t):
+        if t + 1 == self._N:
+            self._option_values = s_values.copy()
+            self.update_started(s_values, t)
+            self.compute_option_values(s_values)
+            self.compute_values()
             
     def compute_option_values(self, s_values):
         for i in range(0, self._M):
-            self._option_values = self._pay.payoff(s_values[i])
+            self._option_values[i] = self._pay.payoff(s_values[i])
             
         self.ready = True
             

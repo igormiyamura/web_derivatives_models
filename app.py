@@ -1,5 +1,5 @@
 
-import streamlit as st
+import streamlit as st, numpy as np
 from datetime import datetime
 import matplotlib.pyplot as plt
 
@@ -33,6 +33,7 @@ class App:
         for i in range(0, n_lines):
             plt.plot(simulations[i])
             
+        plt.title(f'Caminhos do ativo com [{self.data["N"]}] steps')
         st.pyplot(plt)
         
     def define_data(self, S0, r, sigma, X, T, U, D, M, N, payoff, event, option, process, method, wiener):
@@ -67,7 +68,7 @@ class App:
 if __name__ == "__main__":
     app = App()
     data = app.data
-    print(data)
+    # print(data)
     
     run = st.button('Rodar Simulação')
     
@@ -76,9 +77,15 @@ if __name__ == "__main__":
         mc = MonteCarlo.MonteCarlo(data)
         v, se, simulations = mc.run()
         
-        app.plot_simulations(simulations, n_lines=100)  
-        st.write(f'Option Value: {v}')
-        st.write(f'Standard Error: {se}')
+        col1, col2 = st.columns(2)
+        col1.metric('Option Value', np.round(v, 4))
+        col2.metric('Standard Error', np.round(se, 4))
+        
+        # Montar gráfico do Payoff
+        
+        with st.expander('View graph'):
+            app.plot_simulations(simulations, n_lines=100)
+        
     
     
     

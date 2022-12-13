@@ -1,11 +1,11 @@
 
 import numpy as np, streamlit as st
+
+from datetime import datetime
 from services.evolver import EvolverW
 
 class MonteCarlo:
     def __init__(self, data) -> None:
-        # Streamlit
-        self.my_bar = st.progress(0)
         
         # Parametros
         self.S0, self.r, self.sigma = data['S0'], data['r'], data['sigma'] # GBM
@@ -27,6 +27,19 @@ class MonteCarlo:
         self.option_value = 0
         self.se_value = 0
         
+    def __del__(self):
+        print(f'[{datetime.now()}][MonteCarlo] > Deletando objetos...')
+        del(self._slice_time)
+        del(self._slice)
+        del(self.option_value)
+        del(self.se_value)
+        
+        del(self.OBJ_Payoff)
+        del(self.OBJ_Event)
+        del(self.OBJ_Option)
+        del(self.OBJ_Process)
+        del(self.OBJ_Method)
+        del(self.OBJ_EVOL)
         
     def run(self):
         simulation_values = {}
@@ -41,8 +54,6 @@ class MonteCarlo:
             for v in self._slice:
                 simulation_values[count_simulation].append(v)
                 count_simulation += 1
-            
-            self.my_bar.progress(i/self.N) # Progress Bar
             
         self.register()
         value = self.option_value

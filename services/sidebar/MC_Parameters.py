@@ -10,5 +10,8 @@ class MC_Parameters:
         M = st.sidebar.slider('Number of Simulations', value=50000, 
                       min_value=10000, max_value=100000)
         
-        return N, M
+        mc_runs = st.sidebar.slider('Number of Simulations', value=5, 
+                      min_value=1, max_value=10)
+        
+        return N, M, mc_runs
         
